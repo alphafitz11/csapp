@@ -1,5 +1,8 @@
-#include<stdlib.h>
-#include<stdint.h>
+#ifndef __REGISTER_H
+#define __REGISTER_H
+
+#include <stdlib.h>
+#include <stdint.h>
 
 /*
 CPU is a state machine composed of registers,
@@ -30,3 +33,5 @@ typedef struct REG_STRUCT
 } reg_t;
 
 reg_t reg;
+
+#endif

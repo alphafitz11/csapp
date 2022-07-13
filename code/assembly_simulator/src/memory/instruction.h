@@ -1,5 +1,8 @@
-#include<stdlib.h>
-#include<stdint.h>
+#ifndef __INSTRUCTION_H
+#define __INSTRUCTION_H
+
+#include <stdlib.h>
+#include <stdint.h>
 
 // operation types
 #define NUM_INSTRTYPE 30
@@ -60,3 +63,5 @@ void mov_reg_reg_handler(uint64_t src, uint64_t dst);
 
 
 void add_reg_reg_handler(uint64_t src, uint64_t dst);
+
+#endif

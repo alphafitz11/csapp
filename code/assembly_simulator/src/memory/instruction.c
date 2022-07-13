@@ -1,5 +1,6 @@
-#include<stdint.h>
-#include<stdlib.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "cpu/mmu.h"
 #include "cpu/register.h"
@@ -89,7 +90,10 @@ void instruction_cycle()
     // func(src, dst);
 
     handler_t handler = handler_table[instr->op];
+
     handler(src, dst);
+
+    printf("    %s\n", instr->code);
 }
 
 void init_handler_table()
@@ -101,7 +105,7 @@ void init_handler_table()
 
 void mov_reg_reg_handler(uint64_t src, uint64_t dst)
 {
-    *(uint64_t *)dst = *(uint64_t *)dst + *(uint64_t *)src;
+    *(uint64_t *)dst = *(uint64_t *)src;
     reg.rip = reg.rip + sizeof(inst_t);
 }
 

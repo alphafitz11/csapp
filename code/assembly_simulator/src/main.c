@@ -1,10 +1,10 @@
-#include<stdio.h>
+#include <stdio.h>
 
 #include "cpu/mmu.h"
 #include "cpu/register.h"
 #include "disk/elf.h"
-#include "memory/instruction.h"
 #include "memory/dram.h"
+#include "memory/instruction.h"
 
 uint64_t add(uint64_t a, uint64_t b)
 {
@@ -31,19 +31,26 @@ int main()
     reg.rdi = 0x1;
     reg.rbp = 0x7ffffffee1d0;
     reg.rsp = 0x7ffffffee1b0;
+
     reg.rip = (uint64_t)&program[11];
 
     // init memory state with stack format
-    mm[va2pa(0x7ffffffee1d0)] = 0x0;  // rbp, top of stack
-    mm[va2pa(0x7ffffffee1cf)] = 0x0;
-    mm[va2pa(0x7ffffffee1c0)] = 0x0000abcd;
-    mm[va2pa(0x7ffffffee1bf)] = 0x12340000;
-    mm[va2pa(0x7ffffffee1b0)] = 0x0;  // rsp, bottom of stack
+    write64bits_dram(va2pa(0x7ffffffee1d0), 0x0);  // rbp, top of stack
+    write64bits_dram(va2pa(0x7ffffffee1c8), 0x0);
+    write64bits_dram(va2pa(0x7ffffffee1c0), 0x0000abcd);
+    write64bits_dram(va2pa(0x7ffffffee1b8), 0x12340000);
+    write64bits_dram(va2pa(0x7ffffffee1b0), 0x0);  // rsp, bottom of stack
+
+    print_register();
+    print_stack();
 
     // run inst
-    for (int i = 0; i < 15; i ++)
+    for (int i = 0; i < 1; i ++)
     {
         instruction_cycle();
+        
+        print_register();
+        print_stack();
     }
 
     // verify: compare the registers and the stack memory with the real values
@@ -67,11 +74,11 @@ int main()
         printf("register not match\n");
     }
 
-    match = match && (mm[va2pa(0x7ffffffee1d0)] == 0x0);  // rbp, top of stack
-    match = match && (mm[va2pa(0x7ffffffee1cf)] == 0x1234abcd);
-    match = match && (mm[va2pa(0x7ffffffee1c0)] == 0x0000abcd);
-    match = match && (mm[va2pa(0x7ffffffee1bf)] == 0x12340000);
-    match = match && (mm[va2pa(0x7ffffffee1b0)] == 0x0);  // rsp, bottom of stack
+    match = match && (read64bits_dram(va2pa(0x7ffffffee1d0)) == 0x0);  // rbp, top of stack
+    match = match && (read64bits_dram(va2pa(0x7ffffffee1c8)) == 0x1234abcd);
+    match = match && (read64bits_dram(va2pa(0x7ffffffee1c0)) == 0x0000abcd);
+    match = match && (read64bits_dram(va2pa(0x7ffffffee1b8)) == 0x12340000);
+    match = match && (read64bits_dram(va2pa(0x7ffffffee1b0)) == 0x0);  // rsp, bottom of stack    
 
     if (match == 1)
     {
