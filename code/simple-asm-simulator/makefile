@@ -1,9 +1,9 @@
 CC = /usr/bin/gcc-9
 CFLAGS = -Wall -g -O2 -Werror -std=gnu99
 
-EXE = program
+EXECUTABLE = csapp
 
-SRC = ./src
+SRC_DIR = ./src
 
 CODE = 	./src/cpu/mmu.c \
 		./src/disk/code.c \
@@ -11,9 +11,12 @@ CODE = 	./src/cpu/mmu.c \
 		./src/memory/instruction.c \
 		./src/main.c
 
-.PHONY: program
-main:
-	$(CC) $(CFLAGS) -I$(SRC) $(CODE) -o $(EXE)
+.PHONY: csapp
+csapp:
+	$(CC) $(CFLAGS) -I$(SRC_DIR) $(CODE) -o $(EXECUTABLE)
+
+clean:
+	rm -f *.o *~ $(EXECUTABLE)
 
 run:
-	./$(EXE)
+	./$(EXECUTABLE)

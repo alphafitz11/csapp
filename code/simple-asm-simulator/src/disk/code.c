@@ -29,7 +29,7 @@ inst_t program[15] =
     {
         mov_reg_mem,
         { REG, 0, 0, (uint64_t *)&reg.rsi, NULL },
-        { MM_IMM_REG, -0x18, 0, (uint64_t *)&reg.rbp, NULL},
+        { MM_IMM_REG, -0x20, 0, (uint64_t *)&reg.rbp, NULL},
         "mov    \%rsi,-0x20(\%rbp)"
     },
     {
@@ -89,13 +89,13 @@ inst_t program[15] =
         { REG, 0, 0, &reg.rdi, NULL },
         "mov \%rax, \%rdi"
     },
-    {
+    {   // reg.rip
         call,
         { IMM, (uint64_t)&(program[0]), 0, NULL, NULL },
         { EMPTY, 0, 0, NULL, NULL},
         "callq  1129 <add>"
     },
-    {
+    {   // return address
         mov_reg_mem,
         { REG, 0, 0, (uint64_t *)&reg.rax, NULL },
         { MM_IMM_REG, -0x8, 0, (uint64_t *)&reg.rbp, NULL},

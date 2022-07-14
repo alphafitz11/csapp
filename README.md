@@ -1,8 +1,14 @@
 # csapp
 
-The csapp project is my learning record of the CSAPP.
+## code
+The code in `code` is my learning record of video course of [yaaangmin](https://space.bilibili.com/4564101). His public repo [bcst_csapp](https://github.com/yangminz/bcst_csapp) is also available.
 
-The source code in `code` directory is my learning record of video course of [yaaangmin](https://space.bilibili.com/4564101?spm_id_from=333.337.0.0), you can also learn all his code from his project [bcst_csapp](https://github.com/yangminz/bcst_csapp).
+### simple-asm-simulator
+The `simple-asm-simulator` project is the bcst_csapp code before [video 0x08](https://www.bilibili.com/video/BV1WK41137JT) (the first code rebuilding).
 
-The source code in `lab` directory is the lab code of CSAPP, but it's empty for now.
+### csapp
+The `csapp` project is the bcst_csapp code after [video 0x08](https://www.bilibili.com/video/BV1WK41137JT) (the first code rebuilding).
 
+
+## lab
+The labs of the CSAPP book.

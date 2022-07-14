@@ -15,6 +15,7 @@ uint64_t add(uint64_t a, uint64_t b)
 
 int main()
 {
+    // code to be simulated:
     // uint64_t a = 0x12340000;
     // uint64_t b = 0x0000abcd;
     // uint64_t c = add(a, b);
@@ -45,7 +46,7 @@ int main()
     print_stack();
 
     // run inst
-    for (int i = 0; i < 1; i ++)
+    for (int i = 0; i < 7; i ++)
     {
         instruction_cycle();
         
