@@ -10,5 +10,5 @@ The `simple-asm-simulator` project is the bcst_csapp code before [video 0x08](ht
 The `csapp` project is the bcst_csapp code after [video 0x08](https://www.bilibili.com/video/BV1WK41137JT) (the first code rebuilding).
 
 
-## lab
-The labs of the CSAPP book.
+## ~~lab~~
+~~The labs of the CSAPP book.~~

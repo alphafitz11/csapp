@@ -102,8 +102,10 @@ void init_handler_table()
 {
     handler_table[mov_reg_reg] = &mov_reg_reg_handler;
     handler_table[mov_reg_mem] = &mov_reg_mem_handler;
+    handler_table[mov_mem_reg] = &mov_mem_reg_handler;
     handler_table[push_reg] = &push_reg_handler;
     handler_table[pop_reg] = &pop_reg_handler;
+    handler_table[ret] = &ret_handler;
     handler_table[call] = &call_handler;
     handler_table[add_reg_reg] = &add_reg_reg_handler;    
 }
@@ -128,6 +130,15 @@ void mov_reg_mem_handler(uint64_t src, uint64_t dst)
     reg.rip = reg.rip + sizeof(inst_t);
 }
 
+void mov_mem_reg_handler(uint64_t src, uint64_t dst)
+{
+    // src: mem virtual address
+    // dst: reg
+    *(uint64_t *)dst = read64bits_dram(va2pa(src));
+
+    reg.rip = reg.rip + sizeof(inst_t);
+}
+
 void push_reg_handler(uint64_t src, uint64_t dst)
 {
     // src: reg
@@ -142,14 +153,24 @@ void push_reg_handler(uint64_t src, uint64_t dst)
 
 void pop_reg_handler(uint64_t src, uint64_t dst)
 {
-    // TODO
-    printf("pop\n");
+    //src: rbp, reg
+    *(uint64_t *)src = read64bits_dram(va2pa(reg.rsp));
+    reg.rsp += 8;
+    reg.rip = reg.rip + sizeof(inst_t);
+}
+
+void ret_handler(uint64_t src, uint64_t dst)
+{
+    uint64_t ret_addr = read64bits_dram(va2pa(reg.rsp));
+
+    reg.rsp += 8;
+    reg.rip = ret_addr;
 }
 
 void call_handler(uint64_t src, uint64_t dst)
 {
     // src: imm address of called function
-    reg.rsp = reg.rsp + 8;
+    reg.rsp = reg.rsp - 8;
 
     // write return address to rsp memory
     write64bits_dram(
