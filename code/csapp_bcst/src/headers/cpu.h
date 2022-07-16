@@ -256,7 +256,7 @@ typedef struct CORE_STRUCT
     uint32_t OF;
 
     // register files
-    reg_t       reg;
+    reg_t reg;
 } core_t;
 
 // define cpu core array to support core level parallelism

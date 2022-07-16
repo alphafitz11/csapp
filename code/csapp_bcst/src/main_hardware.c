@@ -6,6 +6,7 @@
 
 #define MAX_NUM_INSTRUCTION_CYCLE 100
 
+static void TestString2Uint();
 static void TestAddFunctionCallAndComputation();
 
 // symbols from isa and sram
@@ -14,8 +15,32 @@ void print_stack(core_t *cr);
 
 int main()
 {
-    TestAddFunctionCallAndComputation();
+    TestString2Uint();
     return 0;
+}
+
+static void TestString2Uint()
+{
+    const char* nums[12] = 
+    {
+        "0",
+        "-0",
+        "0x0",
+        "1234",
+        "0x1234",
+        "0xabcd",
+        "-0xabcd",
+        "-1234",
+        "2147483647",
+        "-2147483648",
+        "0x8000000000000000",
+        "0xffffffffffffffff"
+    };
+
+    for (int i = 0; i < 12; ++ i)
+    {
+        printf("%s => %lx\n", nums[i], string2uint(nums[i]));
+    }
 }
 
 static void TestAddFunctionCallAndComputation()
@@ -103,10 +128,11 @@ static void TestAddFunctionCallAndComputation()
 
     match = 1;
 
+    // real stack value is still unknown
     match = match && (read64bits_dram(va2pa(0x7ffffffee110, ac), ac) == 0x0);  // rbp, top of stack
-    match = match && (read64bits_dram(va2pa(0x7ffffffee108, ac), ac) == 0x1234abcd);
-    match = match && (read64bits_dram(va2pa(0x7ffffffee100, ac), ac) == 0x0000abcd);
-    match = match && (read64bits_dram(va2pa(0x7ffffffee0f8, ac), ac) == 0x12340000);
+    match = match && (read64bits_dram(va2pa(0x7ffffffee108, ac), ac) == 0x0);
+    match = match && (read64bits_dram(va2pa(0x7ffffffee100, ac), ac) == 0x0);
+    match = match && (read64bits_dram(va2pa(0x7ffffffee0f8, ac), ac) == 0x0);
     match = match && (read64bits_dram(va2pa(0x7ffffffee0f0, ac), ac) == 0x0);  // rsp, bottom of stack    
     
     if (match)
