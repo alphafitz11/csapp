@@ -57,8 +57,8 @@ typedef struct OPERAND_STRUCT
 typedef struct INST_STRUCT
 {
     op_t op;    // enum of operators. e.g. mov, call, etc.
-    op_t src;   // operand src of instruction
-    op_t dst;   // operand dst of instruction
+    od_t src;   // operand src of instruction
+    od_t dst;   // operand dst of instruction
 } inst_t;
 
 /*=======================================*/
@@ -216,7 +216,7 @@ static inline void next_rip(core_t *cr)
 static void mov_handler(od_t *src_od, od_t *dst_od, core_t *cr)
 {
     uint64_t src = decode_operand(src_od);
-    uint16_t dst = decode_operand(dst_od);
+    uint64_t dst = decode_operand(dst_od);
 
     if (src_od->type == REG && dst_od->type == REG)
     {
@@ -429,11 +429,11 @@ void print_register(core_t *cr)
         cr->CF, cr->ZF, cr->SF, cr->OF);
 }
 
-void print_register(core_t *cr)
+void print_stack(core_t *cr)
 {
     if ((DEBUG_VERBOSE_SET & DEBUG_PRINTSTACK) == 0x0)
     {
-        return 0;
+        return;
     }
 
     int n = 10;
@@ -444,7 +444,7 @@ void print_register(core_t *cr)
     for (int i = 0; i < 2 * n; ++ i)
     {
         uint64_t *ptr = (uint64_t *)(high - i);
-        printf("0x%16lx : 0x16lx", va, (uint64_t)*ptr);
+        printf("0x%16lx : 0x%16lx", va, (uint64_t)*ptr);
 
         if (i == n)
         {
