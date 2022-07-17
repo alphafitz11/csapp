@@ -12,10 +12,13 @@ The check information of registers and memory in `main.c` is obtained through gd
 
 To test this branch, you can run `make csapp` in `simple-asm-simulator` to compile the source code, and run `make run` to check the output. The last 2 lines will show the match results.
 
-### branch: csapp_bcst (main for now)
-The `csapp` project is the bcst_csapp code after [video 0x08](https://www.bilibili.com/video/BV1WK41137JT) (the first code rebuilding).
+### branch: part1_finish
+The part 1 code is finished according to the video 0x0C of bcst_csapp. The tests of add function and recursive sum function are passed by running `make hardware_csapp`.
 
-Some `make` commands are shown in `makefile`.
+In this project, the assembly instructions are decoded by strings.
+
+### branch: main
+The branch main is still under construction.
 
 ## ~~lab~~
 ~~The labs of the CSAPP book.~~
