@@ -16,7 +16,7 @@
 #define DEBUG_PARSEINST         0X100
 
 // to control the verbose degree of debug_printf
-#define DEBUG_VERBOSE_SET       0X101
+#define DEBUG_VERBOSE_SET       0X001
 
 // do page walk
 #define DEBUG_ENABLE_PAGE_WALK  0

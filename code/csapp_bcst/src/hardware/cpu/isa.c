@@ -733,7 +733,15 @@ static void add_handler(od_t *src_od, od_t *dst_od, core_t *cr)
         // dst: register (value: int64_t bit map)
         uint64_t val = *(uint64_t *)dst + *(uint64_t *)src;
 
+        int val_sign = (val >> 63) & 0x1;
+        int src_sign = ((*(uint64_t *)src) >> 63) & 0x1;
+        int dst_sign = ((*(uint64_t *)dst) >> 63) & 0x1;
+
         // set condition flags
+        cr->flags.CF = (val < *(uint64_t *)src);  // unsigned
+        cr->flags.ZF = (val == 0);
+        cr->flags.SF = val_sign;
+        cr->flags.OF = (src_sign == 0 && dst_sign == 0 && val_sign == 1) || (src_sign == 1 && dst_sign == 1 && val_sign == 0);  // signed
 
         // update registers
         *(uint64_t *)dst = val;
@@ -746,7 +754,25 @@ static void add_handler(od_t *src_od, od_t *dst_od, core_t *cr)
 
 static void sub_handler(od_t *src_od, od_t *dst_od, core_t *cr)
 {
+    uint64_t src = decode_operand(src_od);
+    uint64_t dst = decode_operand(dst_od);
 
+    if (src_od->type == IMM && dst_od->type == REG)
+    {
+        // src: register (value: int64_t bit map)
+        // dst: register (value: int64_t bit map)
+        // dst = dst - src
+        uint64_t val = *(uint64_t *)dst + ~src + 1;
+
+        // set condition flags
+
+        // update registers
+        *(uint64_t *)dst = val;
+        // signed and unsigned value follow the same addition. e.g.
+        // 5 = 0000000000000101, 3 = 0000000000000011, -3 = 1111111111111101, 5 + (-3) = 0000000000000010
+        next_rip(cr);
+        return;
+    }
 }
 
 static void cmp_handler(od_t *src_od, od_t *dst_od, core_t *cr)
@@ -769,8 +795,10 @@ static void jmp_handler(od_t *src_od, od_t *dst_od, core_t *cr)
 void instruction_cycle(core_t *cr)
 {
     // FETCH: get the instruction string by program counter
-    const char *inst_str = (const char *)cr->rip;
-    debug_printf(DEBUG_INSTRUCTIONCYCLE, "%lx    %s\n", cr->rip, inst_str);
+    char inst_str[MAX_INSTRUCTION_CHAR + 10];
+    readinst_dram(va2pa(cr->rip, cr), inst_str, cr);
+
+    debug_printf(DEBUG_INSTRUCTIONCYCLE, "%8lx    %s\n", cr->rip, inst_str);
 
     // DECODE: decode the run-time instruction operands
     inst_t inst;
