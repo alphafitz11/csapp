@@ -52,6 +52,24 @@ static void TestAddFunctionCallAndComputation()
     write64bits_dram(va2pa(0x7ffffffee0f8, ac), 0x000000000000abcd, ac);
     write64bits_dram(va2pa(0x7ffffffee0f0, ac), 0x0000000000000000, ac);  // rsp
 
+    /* source code
+    #include <stdint.h>
+
+    uint64_t add(uint64_t a, uint64_t b)
+    {
+        uint64_t c = a + b;
+        return c;
+    }
+
+    int main()
+    {
+        uint64_t a = 0x12340000;
+        uint64_t b = 0xabcd;
+        uint64_t c = add(a, b);
+        return 0;
+    }    
+    */
+
     // 2 before call
     // 3 after call before push
     // 5 after rbp
@@ -148,6 +166,28 @@ static void TestSumRecursiveCondition()
     write64bits_dram(va2pa(0x7ffffffee230, cr), 0x0000000008000650, cr);    // rbp
     write64bits_dram(va2pa(0x7ffffffee228, cr), 0x0000000000000000, cr);
     write64bits_dram(va2pa(0x7ffffffee220, cr), 0x00007ffffffee310, cr);    // rsp
+
+    /* source code
+    #include <stdint.h>
+
+    uint64_t sum(uint64_t n)
+    {
+        if (n == 0)
+        {
+            return 0;
+        }
+        else
+        {
+            return n + sum(n - 1);
+        }
+    }
+
+    int main()
+    {
+        uint64_t a = sum(3);
+        return 0;
+    }
+    */
 
     char assembly[19][MAX_INSTRUCTION_CHAR] = {
         "push   %rbp",              // 0
