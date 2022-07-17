@@ -210,6 +210,22 @@ typedef struct REGISTER_STRUCT
 /*               cpu core                */
 /*=======================================*/
 
+typedef union CPU_FLAGS_STRUCT
+{
+    uint64_t __cpu_flag_value;
+    struct
+    {
+        // carry flag: detect overflow for unsigned operations
+        uint16_t CF;
+        // zero flag: result is zero
+        uint16_t ZF;
+        // sign flag: result is negative: highest bit
+        uint16_t SF;
+        // overflow flag: detect overflow for signed operations
+        uint16_t OF;
+    };
+} cpu_flag_t;
+
 typedef struct CORE_STRUCT
 {
     // program counter or instruction pointer
@@ -246,14 +262,9 @@ typedef struct CORE_STRUCT
         test    test
     */
 
-    // carry flag: detect overflow for unsigned operations
-    uint32_t CF;
-    // zero flag: result is zero
-    uint32_t ZF;
-    // sign flag: result is negative: highest bit
-    uint32_t SF;
-    // overflow flag: detect overflow for signed operations
-    uint32_t OF;
+    cpu_flag_t flags;
+    // if we have a core_t variable cr and we want to set 4 flags to 0,
+    // we can use: cr.flags.__flag_value = 0
 
     // register files
     reg_t reg;

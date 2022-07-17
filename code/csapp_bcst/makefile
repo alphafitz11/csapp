@@ -25,5 +25,8 @@ hardware:
 run:
 	./$(EXE_HARDWARE)
 
+hardware_run:
+	$(CC) $(CFLAGS) -I$(SRC_DIR) $(COMMON) $(CPU) $(MEMORY) $(MAIN_HARDWARE) -o $(EXE_HARDWARE) && ./$(EXE_HARDWARE)
+
 clean:
 	rm -f *.o *~ $(EXE_HARDWARE)
