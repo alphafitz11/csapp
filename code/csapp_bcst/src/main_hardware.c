@@ -14,10 +14,11 @@ void print_register(core_t *cr);
 void print_stack(core_t *cr);
 
 void TestParsingOperand();
+void TestParsingInstruction();
 
 int main()
 {
-    TestParsingOperand();
+    TestParsingInstruction();
     return 0;
 }
 
